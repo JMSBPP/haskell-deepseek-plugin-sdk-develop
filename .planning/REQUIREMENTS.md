@@ -7,10 +7,10 @@
 
 ### Protocol (PROTO)
 
-- [ ] **PROTO-01**: `PROTOCOL.md` freezes method names, handshake manifest, `protocolVersion`, error codes (incl. `-32004 TOOL_FAILED` vs `-32603`, `-32800 RequestCancelled`), and the rule that `params` is always a JSON object and batches are unsupported
-- [ ] **PROTO-02**: A shared conformance corpus (`corpus/host.jsonl`, `corpus/plugin.jsonl`) covers handshake, tool call, guard decision, cancellation, malformed frames, and shutdown; both the Haskell tests and the TS bridge tests replay it
-- [ ] **PROTO-03**: Handshake is host-initiated (`initialize` → manifest); a `protocolVersion` mismatch fails loud on both sides with no compatibility shim
-- [ ] **PROTO-04**: Manifest declares tools (name, description, args schema, output schema, static presentation intent), guards (matched tool names, timeout policy), static sections, and subagent providers
+- [x] **PROTO-01**: `PROTOCOL.md` freezes method names, handshake manifest, `protocolVersion`, error codes (incl. `-32004 TOOL_FAILED` vs `-32603`, `-32800 RequestCancelled`), and the rule that `params` is always a JSON object and batches are unsupported
+- [x] **PROTO-02**: A shared conformance corpus (`corpus/host.jsonl`, `corpus/plugin.jsonl`) covers handshake, tool call, guard decision, cancellation, malformed frames, and shutdown; both the Haskell tests and the TS bridge tests replay it
+- [x] **PROTO-03**: Handshake is host-initiated (`initialize` → manifest); a `protocolVersion` mismatch fails loud on both sides with no compatibility shim
+- [x] **PROTO-04**: Manifest declares tools (name, description, args schema, output schema, static presentation intent), guards (matched tool names, timeout policy), static sections, and subagent providers
 
 ### Toolchain (TOOL)
 
@@ -102,10 +102,10 @@ Which phases cover which requirements. Every v1 requirement maps to exactly one 
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PROTO-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
-| PROTO-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
-| PROTO-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
-| PROTO-04 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| PROTO-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
+| PROTO-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
+| PROTO-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
+| PROTO-04 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 | TOOL-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 | TOOL-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 | TOOL-03 | Phase 7 — Echo Example and Conformance Gate | Pending |

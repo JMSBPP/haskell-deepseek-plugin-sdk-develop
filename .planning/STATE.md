@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-08-25T20:45:20.241Z"
-last_activity: "2026-08-25 — Plan 01-03 complete: CI workflow, linter config, ADR 0001 (e2e tiering)"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-08-25T20:46:05.713Z"
+last_activity: "2026-08-25 — Plan 01-02 complete: 17-scenario conformance corpus and frozen PROTOCOL.md"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 5
   completed_plans: 3
-  percent: 40
+  percent: 60
 ---
 
 # Project State
@@ -26,16 +26,16 @@ See: .planning/PROJECT.md (updated 2026-08-25)
 ## Current Position
 
 Phase: 1 of 10 (Protocol Freeze and Toolchain Foundation)
-Plan: 2 of 5 in current phase
+Plan: 3 of 5 in current phase
 Status: In progress
-Last activity: 2026-08-25 — Plan 01-03 complete: CI workflow, linter config, ADR 0001 (e2e tiering)
+Last activity: 2026-08-25 — Plan 01-02 complete: 17-scenario conformance corpus and frozen PROTOCOL.md
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 3
 - Average duration: —
 - Total execution time: 0.0 hours
 
@@ -73,6 +73,11 @@ Recent decisions affecting current work:
 - [Phase 1 / ADR 0001]: E2E-03 resolved — deepseek-harness CI runs a Node fixture plugin replaying corpus/plugin.jsonl; this repo owns the real-binary tiers (E2E-01 keyless, E2E-02 keyed). Recorded at docs/adr/0001-harness-e2e-tiering.md for the Phase 10 bridge PR to cite.
 - [Phase 1 / CI]: Every pinned GitHub Action must declare node24 (GitHub drops Node 20 from runners 2026-09-16) — hence hlint from its release tarball instead of hlint-setup/hlint-run, and actions/cache@v5 rather than @v4.
 - [Phase 1 / CI]: hlint and fourmolu are advisory until Phase 7 removes continue-on-error alongside the last corpus EXPECTED.md; the Windows/macOS matrix is deferred to Phase 2 with the transport. Both deferrals are commented in ci.yml.
+- [Phase 01]: PROTOCOL.md freezes -32800 as the cancellation code; -32003 CANCELLED is retired and a cancelled in-flight request always gets a reply
+- [Phase 01]: An unknown tool/guard/subagent name answers -32002 UNKNOWN_CONTRIBUTION, never -32601; -32601 stays for an unknown method
+- [Phase 01]: The host evaluates guard match.tools, so Guard carries matchTools :: [ToolName] and the plugin's per-guard failPolicy is authoritative
+- [Phase 01]: Subagent results use output (mirroring SubagentResult); lastAssistantMessage is retired from REQUIREMENTS.md and PROJECT.md
+- [Phase 01]: Corpus ids normalize in two passes so a response inherits the requester's direction (h1, never p1)
 
 ### Pending Todos
 
@@ -82,7 +87,7 @@ None yet.
 
 ### Blockers/Concerns
 
-- [Phase 1]: Cancellation error code conflicts across inputs — REQUIREMENTS.md says `-32800 RequestCancelled`, ARCHITECTURE.md says `-32003 CANCELLED`. `PROTOCOL.md` must pick one; the corpus and both implementations follow it.
+- [Phase 1]: RESOLVED (plan 01-02) — `PROTOCOL.md` picks `-32800 REQUEST_CANCELLED`; `-32003` is retired and appears nowhere in `corpus/` or `PROTOCOL.md`.
 - [Phase 1]: RESOLVED (plan 01-03) — deepseek-harness CI has no GHC, and the e2e tiering (E2E-03) is now settled in `docs/adr/0001-harness-e2e-tiering.md`: harness CI runs the Node corpus fixture; this repo owns E2E-01 and E2E-02. Residual risk: a Haskell-only regression is caught here, not in harness CI.
 - [Phase 10]: Cross-repo by construction — this repo cannot merge the bridge/e2e work alone; it lands under deepseek-harness's own gates (per-file 100% coverage, doc-sync, Agent Note, keyless snapshot).
 - [Phase 4]: The mechanism for mechanically agreeing Haskell-derived schemas with the harness's `assertSupportedJsonSchema` has a known field-set-only gap in the closest prior art; flagged for research during planning.
@@ -91,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-25T20:44:34.972Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-08-25T20:46:05.711Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
