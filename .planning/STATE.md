@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-08-25T20:46:05.713Z"
-last_activity: "2026-08-25 — Plan 01-02 complete: 17-scenario conformance corpus and frozen PROTOCOL.md"
+stopped_at: Completed 01-04-PLAN.md
+last_updated: "2026-08-25T20:52:30.000Z"
+last_activity: "2026-08-25 — Plan 01-04 complete: conformance suite green with 21 visible expected failures"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 5
-  completed_plans: 3
-  percent: 60
+  completed_plans: 4
+  percent: 80
 ---
 
 # Project State
@@ -26,16 +26,16 @@ See: .planning/PROJECT.md (updated 2026-08-25)
 ## Current Position
 
 Phase: 1 of 10 (Protocol Freeze and Toolchain Foundation)
-Plan: 3 of 5 in current phase
+Plan: 4 of 5 in current phase
 Status: In progress
-Last activity: 2026-08-25 — Plan 01-02 complete: 17-scenario conformance corpus and frozen PROTOCOL.md
+Last activity: 2026-08-25 — Plan 01-04 complete: conformance suite green with 21 visible expected failures
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: —
 - Total execution time: 0.0 hours
 
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 60%
 | Phase 01 P01 | 3 | 2 tasks | 15 files |
 | Phase 01 P03 | 3min | 3 tasks | 6 files |
 | Phase 01-protocol-freeze-and-toolchain-foundation P02 | 5min | 3 tasks | 56 files |
+| Phase 01-protocol-freeze-and-toolchain-foundation P04 | 4min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -78,6 +79,11 @@ Recent decisions affecting current work:
 - [Phase 01]: The host evaluates guard match.tools, so Guard carries matchTools :: [ToolName] and the plugin's per-guard failPolicy is authoritative
 - [Phase 01]: Subagent results use output (mirroring SubagentResult); lastAssistantMessage is retired from REQUIREMENTS.md and PROJECT.md
 - [Phase 01]: Corpus ids normalize in two passes so a response inherits the requester's direction (h1, never p1)
+- [Phase 01]: The known-red manifest is the filesystem — EXPECTED.md presence alone decides expectFailBecause, so there is no parallel list to drift and an unexpected pass fails the suite
+- [Phase 01]: The conformance scenario tree is built in IO before defaultMain; withResource cannot change tree shape, so it is reserved for Phase 7's spawned binary
+- [Phase 01]: The Hedgehog cancellation state machine targets hedgehog 1.5's barbies FunctorB/TraversableB Command, not the deprecated HTraversable, so Phase 3 replaces the model and not the plumbing
+- [Phase 01]: scripts/check-red-visible.sh parses a captured tasty log instead of running stack test, so CI builds and runs the suite once and set -euo pipefail cannot swallow its exit code
+- [Phase 01]: The corpus is never wired as a tasty-golden golden; --accept would rewrite the hand-authored spec. Goldens start at Phase 5's --dump-manifest output
 
 ### Pending Todos
 
@@ -96,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-08-25T20:46:05.711Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-08-25T20:52:30.000Z
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
