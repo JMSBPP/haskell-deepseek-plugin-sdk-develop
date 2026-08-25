@@ -98,17 +98,60 @@
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
+Which phases cover which requirements. Every v1 requirement maps to exactly one phase.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (filled by roadmap) | | |
+| PROTO-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| PROTO-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| PROTO-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| PROTO-04 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| TOOL-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| TOOL-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| TOOL-03 | Phase 7 — Echo Example and Conformance Gate | Pending |
+| WIRE-01 | Phase 2 — Wire Envelope and Transport | Pending |
+| WIRE-02 | Phase 2 — Wire Envelope and Transport | Pending |
+| WIRE-03 | Phase 2 — Wire Envelope and Transport | Pending |
+| WIRE-04 | Phase 3 — Peer, Async Router, and Cancellation | Pending |
+| WIRE-05 | Phase 3 — Peer, Async Router, and Cancellation | Pending |
+| WIRE-06 | Phase 2 — Wire Envelope and Transport | Pending |
+| WIRE-07 | Phase 2 — Wire Envelope and Transport | Pending |
+| SCHEMA-01 | Phase 4 — Schema Derivation and Validation | Pending |
+| SCHEMA-02 | Phase 4 — Schema Derivation and Validation | Pending |
+| SCHEMA-03 | Phase 4 — Schema Derivation and Validation | Pending |
+| SCHEMA-04 | Phase 4 — Schema Derivation and Validation | Pending |
+| SCHEMA-05 | Phase 4 — Schema Derivation and Validation | Pending |
+| API-01 | Phase 5 — Plugin API, Manifest, and runPlugin | Pending |
+| API-02 | Phase 5 — Plugin API, Manifest, and runPlugin | Pending |
+| API-03 | Phase 5 — Plugin API, Manifest, and runPlugin | Pending |
+| API-04 | Phase 5 — Plugin API, Manifest, and runPlugin | Pending |
+| API-05 | Phase 3 — Peer, Async Router, and Cancellation | Pending |
+| API-06 | Phase 6 — Guard, Section, and Subagent Seams (Haskell) | Pending |
+| API-07 | Phase 6 — Guard, Section, and Subagent Seams (Haskell) | Pending |
+| API-08 | Phase 6 — Guard, Section, and Subagent Seams (Haskell) | Pending |
+| API-09 | Phase 5 — Plugin API, Manifest, and runPlugin | Pending |
+| API-10 | Phase 7 — Echo Example and Conformance Gate | Pending |
+| BRIDGE-01 | Phase 8 — Bridge Package, Spawn, Handshake, and Tools | Pending |
+| BRIDGE-02 | Phase 8 — Bridge Package, Spawn, Handshake, and Tools | Pending |
+| BRIDGE-03 | Phase 8 — Bridge Package, Spawn, Handshake, and Tools | Pending |
+| BRIDGE-04 | Phase 8 — Bridge Package, Spawn, Handshake, and Tools | Pending |
+| BRIDGE-05 | Phase 9 — Bridge Guard, Section, and Subagent Registration | Pending |
+| BRIDGE-06 | Phase 9 — Bridge Guard, Section, and Subagent Registration | Pending |
+| BRIDGE-07 | Phase 9 — Bridge Guard, Section, and Subagent Registration | Pending |
+| BRIDGE-08 | Phase 8 — Bridge Package, Spawn, Handshake, and Tools | Pending |
+| BRIDGE-09 | Phase 10 — End-to-End Validation and Harness Gates | Pending |
+| BRIDGE-10 | Phase 10 — End-to-End Validation and Harness Gates | Pending |
+| E2E-01 | Phase 7 — Echo Example and Conformance Gate | Pending |
+| E2E-02 | Phase 10 — End-to-End Validation and Harness Gates | Pending |
+| E2E-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 
 **Coverage:**
-- v1 requirements: 44 total
-- Mapped to phases: 0
-- Unmapped: 44 ⚠️
+- v1 requirements: 42 total (the earlier count of 44 was a miscount; 42 checklist items are defined above)
+- Mapped to phases: 42
+- Unmapped: 0 ✓
+
+**Phase totals:** P1: 7 · P2: 5 · P3: 3 · P4: 5 · P5: 5 · P6: 3 · P7: 3 · P8: 5 · P9: 3 · P10: 3
 
 ---
 *Requirements defined: 2026-08-25*
-*Last updated: 2026-08-25 after initial definition*
+*Last updated: 2026-08-25 after roadmap creation (traceability filled, coverage corrected to 42)*
