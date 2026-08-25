@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"h-1","method":"guard/decide","params":{"guard":"no-forbidden","callId":"call-1","tool":"echo","arguments":{"text":"maybe forbidden"}}}

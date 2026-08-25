@@ -1,0 +1,4 @@
+{"jsonrpc":"2.0","id":"h-1","method":"tool/execute","params":["not","an","object"]}
+[{"jsonrpc":"2.0","id":"h-2","method":"shutdown","params":{}}]
+{"jsonrpc":"2.0","id":{"not":"scalar"},"method":"shutdown","params":{}}
+{"jsonrpc":"2.0","id":"h-3","method":"shutdown","params":{}}

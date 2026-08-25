@@ -1,0 +1,4 @@
+{"jsonrpc":"2.0","id":"h-1","error":{"code":-32600,"message":"params must be a JSON object"}}
+{"jsonrpc":"2.0","id":null,"error":{"code":-32600,"message":"batch requests are unsupported"}}
+{"jsonrpc":"2.0","id":null,"error":{"code":-32600,"message":"id must be a string or a number"}}
+{"jsonrpc":"2.0","id":"h-3","result":{}}

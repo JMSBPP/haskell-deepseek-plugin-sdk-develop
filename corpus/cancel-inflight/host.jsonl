@@ -1,0 +1,2 @@
+{"jsonrpc":"2.0","id":"h-1","method":"tool/execute","params":{"callId":"call-1","tool":"echo","arguments":{"text":"slow"}}}
+{"jsonrpc":"2.0","method":"$/cancel","params":{"id":"h-1"}}

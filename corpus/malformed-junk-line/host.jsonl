@@ -1,0 +1,2 @@
+this is not json
+{"jsonrpc":"2.0","id":"h-1","method":"shutdown","params":{}}
