@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"h-1","method":"subagent/run","params":{"runId":"run-1","subagent":"echo-delegate","prompt":[{"type":"text","text":"summarize this"}],"cwd":"/workspace"}}

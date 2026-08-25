@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"h-1","method":"initialize","params":{"protocolVersion":2,"hostInfo":{"name":"deepseek-harness","version":"0.1.1-rc.2"},"cwd":"/workspace"}}
