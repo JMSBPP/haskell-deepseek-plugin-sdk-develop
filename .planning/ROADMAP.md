@@ -102,7 +102,7 @@ Note: PROTO-03's runtime halves are implemented later (plugin side in Phase 5, h
 **Success Criteria** (what must be TRUE):
   1. A guard matching a tool name answers `guard/decide` with allow, deny, or ask, and a deny carries a model-readable reason.
   2. A guard that throws or exceeds its timeout resolves to the fail-open/fail-closed policy declared in the manifest, and that policy is visible in `--dump-manifest`.
-  3. `notifySectionChanged` pushes a `section/changed` notification carrying the new text, and a section otherwise costs zero round trips because its text ships in the manifest.
+  3. `notifySectionChanged` pushes a `section.changed` notification carrying the new text, and a section otherwise costs zero round trips because its text ships in the manifest.
   4. A subagent provider answers `subagent/run` with a stop reason and a last assistant message expressed as content blocks.
 **Plans**: TBD
 
@@ -136,7 +136,7 @@ Note: PROTO-03's runtime halves are implemented later (plugin side in Phase 5, h
 **Success Criteria** (what must be TRUE):
   1. A remote guard's allow calls `next()` so downstream listeners still run; deny and ask short-circuit the waterfall carrying the peer's reason.
   2. A dead, slow, or restarting peer resolves the guard through the manifest's fail policy from a `finally`, so the waterfall always completes.
-  3. A manifest section appears in the assembled system prompt, and a `section/changed` push replaces it by dispose-and-re-register with no plugin restart.
+  3. A manifest section appears in the assembled system prompt, and a `section.changed` push replaces it by dispose-and-re-register with no plugin restart.
   4. A remote subagent appears on `ctx.subagent` and a delegation to it returns the peer's stop reason and last assistant message.
 **Plans**: TBD
 

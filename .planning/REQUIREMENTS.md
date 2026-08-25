@@ -43,11 +43,11 @@
 - [ ] **API-03**: `Tool` existential with `HasCodec` args/output, mandatory output schema, `execute :: a -> Exec -> IO v`, pure `render :: a -> v -> [ContentBlock]`; the result envelope carries `value` plus rendered `content`
 - [ ] **API-04**: `ContentBlock` mirrors the harness (`text | reasoning | image | tool-call | tool-result`) with an `Unknown Value` fall-through; codecs round-trip the harness's JSON exactly
 - [ ] **API-05**: `Exec` exposes `callId`, `cancelled :: STM Bool`, and a `checkCancelled :: IO ()` helper; a cancelled tool returns a `-32800` error
-- [ ] **API-06**: `Guard` with `matches :: ToolName -> Bool` and `decide :: ToolCall -> Exec -> IO GuardDecision`, `GuardDecision = Allow | Deny Text | Ask (Maybe Text)`; a guard exception or timeout maps to a configurable fail-open/fail-closed policy declared in the manifest
-- [ ] **API-07**: `Section` = static text declared in the manifest; `notifySectionChanged :: PluginHandle -> SectionId -> Text -> IO ()` pushes `section/changed`
-- [ ] **API-08**: `Subagent` provider: `run :: Delegation -> Exec -> IO SubagentResult` with `{stopReason, lastAssistantMessage :: [ContentBlock]}`, mirroring `packages/subagent` types
+- [ ] **API-06**: `Guard` with `matchTools :: [ToolName]` (an exact name list, or `["*"]`) and `decide :: ToolCall -> Exec -> IO GuardDecision`, `GuardDecision = Allow | Deny Text | Ask (Maybe Text)`; a guard exception or timeout maps to the per-guard `failPolicy` declared in the manifest, which is authoritative; host config supplies only `requestTimeoutMs`
+- [ ] **API-07**: `Section` = static text declared in the manifest; `notifySectionChanged :: PluginHandle -> SectionId -> Text -> IO ()` pushes `section.changed`
+- [ ] **API-08**: `Subagent` provider: `run :: Delegation -> Exec -> IO SubagentResult` where `Delegation` carries `prompt :: [ContentBlock]` and `SubagentResult` is `{stopReason, output :: [ContentBlock], structured :: Maybe Value, diagnostic :: Maybe Text}`, mirroring `packages/subagent/subagent/src/types.ts`
 - [ ] **API-09**: `--dump-manifest` prints the exact handshake manifest JSON and exits 0; `--protocol-version` prints the version
-- [ ] **API-10**: `examples/echo`: one `echo` tool (args `{text}` → output `{echoed}`), one guard denying calls whose text contains `"forbidden"`, one static section; builds as `dsh-plugin-echo`
+- [ ] **API-10**: `examples/echo`: one `echo` tool (args `{text}` → output `{echoed}`), one guard denying calls whose text contains `"forbidden"`, one static section; builds as `dsh-plugin-echo`; its conformance behaviors are frozen: `text:"quick"` returns immediately; `text:"boom"` fails with `-32004`; `text:"slow"` blocks until cancelled or the scenario deadline; any other text echoes immediately
 
 ### Bridge (BRIDGE) — delivered as a PR to deepseek-harness
 
@@ -56,7 +56,7 @@
 - [ ] **BRIDGE-03**: Performs the host-initiated handshake, validates the manifest as hostile input, rejects on `protocolVersion` mismatch with a loud load error
 - [ ] **BRIDGE-04**: Registers each manifest tool on `ctx.tools` via `ctx.effect()` with the declared output schema and a `render` that returns the `content` shipped in the `tool/execute` result; cancellation reads `exec.signal` at point of use and forwards `$/cancel`
 - [ ] **BRIDGE-05**: Registers guards as `tools/pre-execute` waterfall listeners that call `next()` on `allow` and return `deny`/`ask` otherwise; a timeout applies the manifest's fail policy so the waterfall always completes
-- [ ] **BRIDGE-06**: Registers static sections on `ctx.systemPrompt` and re-registers on `section/changed`
+- [ ] **BRIDGE-06**: Registers static sections on `ctx.systemPrompt` and re-registers on `section.changed`
 - [ ] **BRIDGE-07**: Registers subagent providers on `ctx.subagent` forwarding `subagent/run`
 - [ ] **BRIDGE-08**: All tunables (`command`, `args`, `env`, `cwd`, `maxFrameBytes`, `requestTimeoutMs`, `guardFailPolicy`) are validated `Config` fields; HMR config change restarts the child without orphaning it
 - [ ] **BRIDGE-09**: A ~50-line Node fixture plugin replays `corpus/plugin.jsonl`; a runnable example composition in `packages/examples` uses it and a keyless snapshot records the model calling the tool and the guard denying a call

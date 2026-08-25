@@ -17,12 +17,12 @@ A model running in a headless `dsh` profile can call a tool implemented in Haske
 ### Active
 
 - [ ] Owned JSON-RPC 2.0 envelope (~250 LOC on aeson + stm): request/response/notification, newline-delimited stdio framing, `params` always a JSON object, no batch support, bounded reader (`maxFrameBytes` config). Hackage `json-rpc` (unframed output, heavy closure) and `jsonrpc` (MPL-2.0, one vendor) were evaluated and rejected
-- [ ] Bidirectional dispatch: host-initiated `initialize` handshake returns the manifest; plugin handles `tool/execute`, `guard/decide`, `subagent/run`, `shutdown`, `$/cancel`; plugin may push `section/changed` and later `agent/inject`
+- [ ] Bidirectional dispatch: host-initiated `initialize` handshake returns the manifest; plugin handles `tool/execute`, `guard/decide`, `subagent/run`, `shutdown`, `$/cancel`; plugin may push `section.changed` and later `agent/inject`
 - [ ] `Plugin` record with `tools`, `guards`, `sections`, `subagents`; `runPlugin :: Plugin -> IO ()` owns the event loop, stdout buffering, EOF/SIGPIPE shutdown
 - [ ] `Tool` with args/output types whose JSON Schema is derived via `autodocodec` into an owned `DshSchema` ADT restricted to the harness's supported subset (no `$ref`/`$defs`/`anyOf`/bounds; `$comment`→`description`); output schema mandatory; `execute :: a -> Exec -> IO v`; pure total `render :: a -> v -> [ContentBlock]` runs plugin-side at execute time and ships its blocks inside the `tool/execute` result so the harness can replay without the process
 - [ ] `Guard` bound to the `tools/pre-execute` waterfall returning `Allow | Deny Text | Ask (Maybe Text)` (Allow = `next()`); rewrite is not honored by the harness's `PreToolDecision` and is excluded
-- [ ] `Section`: static prompt-section text declared in the manifest, refreshed by a `section/changed` push notification (`PromptSection.text` is synchronous in the harness, so no per-step round-trip)
-- [ ] `Subagent` provider: one delegation request in, `{stopReason, lastAssistantMessage}` out
+- [ ] `Section`: static prompt-section text declared in the manifest, refreshed by a `section.changed` push notification (`PromptSection.text` is synchronous in the harness, so no per-step round-trip)
+- [ ] `Subagent` provider: one delegation request in, `{stopReason, output}` out
 - [ ] `ContentBlock` mirroring `packages/llm/llm/src/types.ts` (`text | reasoning | image | tool-call | tool-result`) with an `Unknown Value` case for merge-extensibility
 - [ ] Cancellation: `$/cancel {id}` notification flips `Exec.cancelled :: STM Bool`
 - [ ] Every inbound frame validated and rebuilt before use (hostile-input stance matching the harness's own fd-3 protocol)
