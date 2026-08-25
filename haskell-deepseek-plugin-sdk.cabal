@@ -1,0 +1,97 @@
+cabal-version: 2.2
+
+-- This file has been generated from package.yaml by hpack version 0.39.6.
+--
+-- see: https://github.com/sol/hpack
+
+name:           haskell-deepseek-plugin-sdk
+version:        0.1.0.0
+synopsis:       Haskell SDK for DeepSeek Harness out-of-process plugins
+description:    Please see the README and PROTOCOL.md.
+category:       Development
+homepage:       https://github.com/d2p-finance/haskell-deepseek-plugin-sdk#readme
+bug-reports:    https://github.com/d2p-finance/haskell-deepseek-plugin-sdk/issues
+author:         JMSBPP
+maintainer:     juan.serranotmf@gmail.com
+copyright:      2026 JMSBPP
+license:        BSD-3-Clause
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
+    PROTOCOL.md
+
+source-repository head
+  type: git
+  location: https://github.com/d2p-finance/haskell-deepseek-plugin-sdk
+
+library
+  exposed-modules:
+      DeepSeek.Plugin
+      DeepSeek.Plugin.Content
+      DeepSeek.Plugin.Manifest
+      DeepSeek.Plugin.Peer
+      DeepSeek.Plugin.Schema
+      DeepSeek.Plugin.Types
+      DeepSeek.Plugin.Wire
+  other-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  autogen-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      aeson ==2.2.*
+    , async ==2.2.*
+    , base >=4.18 && <4.22
+    , bytestring >=0.11 && <0.13
+    , containers >=0.6 && <0.9
+    , safe-exceptions >=0.1.7 && <0.2
+    , stm ==2.5.*
+    , text >=2.0 && <2.2
+  default-language: GHC2024
+
+executable dsh-plugin-echo
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  autogen-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  hs-source-dirs:
+      app/echo
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base
+    , haskell-deepseek-plugin-sdk
+    , optparse-applicative >=0.18 && <0.20
+  default-language: GHC2024
+
+test-suite conformance
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  other-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  autogen-modules:
+      Paths_haskell_deepseek_plugin_sdk
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      aeson
+    , base
+    , bytestring
+    , directory
+    , filepath
+    , haskell-deepseek-plugin-sdk
+    , hedgehog
+    , tasty
+    , tasty-expected-failure
+    , tasty-golden
+    , tasty-hedgehog
+    , tasty-hunit
+    , temporary
+    , text
+    , typed-process
+  default-language: GHC2024
