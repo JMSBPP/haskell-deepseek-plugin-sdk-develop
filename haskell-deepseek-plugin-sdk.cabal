@@ -73,6 +73,7 @@ test-suite conformance
   main-is: Main.hs
   other-modules:
       Conformance.Corpus
+      Conformance.Properties
       Paths_haskell_deepseek_plugin_sdk
   autogen-modules:
       Paths_haskell_deepseek_plugin_sdk
