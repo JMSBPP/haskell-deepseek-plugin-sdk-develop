@@ -12,7 +12,7 @@ The journey runs from a frozen wire to a model calling Haskell. Phase 1 decides 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Protocol Freeze and Toolchain Foundation** - Frozen `PROTOCOL.md`, shared frame corpus, `lts-24.56` repin, CI, and the harness-CI alignment decision
+- [x] **Phase 1: Protocol Freeze and Toolchain Foundation** - Frozen `PROTOCOL.md`, shared frame corpus, `lts-24.56` repin, CI, and the harness-CI alignment decision (completed 2026-08-25)
 - [ ] **Phase 2: Wire Envelope and Transport** - Owned JSON-RPC 2.0 codec, bounded NDJSON stdio transport, in-memory pair, and frame goldens
 - [ ] **Phase 3: Peer, Async Router, and Cancellation** - One `async` per request, STM correlation and cancel registries, `Exec`
 - [ ] **Phase 4: Schema Derivation and Validation** - `DshSchema` restricted to the harness subset, one-declaration derivation, hostile-arg validator
@@ -159,7 +159,7 @@ Dependency order permits concurrency: 4 alongside 2-3, and 8-9 alongside 2-7.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Protocol Freeze and Toolchain Foundation | 5/5 | In Progress | - |
+| 1. Protocol Freeze and Toolchain Foundation | 5/5 | Complete    | 2026-08-25 |
 | 2. Wire Envelope and Transport | 0/TBD | Not started | - |
 | 3. Peer, Async Router, and Cancellation | 0/TBD | Not started | - |
 | 4. Schema Derivation and Validation | 0/TBD | Not started | - |
