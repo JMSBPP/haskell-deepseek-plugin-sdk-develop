@@ -63,7 +63,7 @@ golden test exists in the tree. Verified: the suite rejects it with
 | 1-01-02 | 01 | 1 | TOOL-01 | build | `stack build --pedantic --test --no-run-tests && git diff --exit-code -- '*.cabal'` | ❌ W0 | ⬜ pending |
 | 1-02-01 | 02 | 1 | PROTO-02, PROTO-03, PROTO-04 | file + JSON parse | 8 request/response scenarios present with `host.jsonl`/`plugin.jsonl`/`EXPECTED.md`; every line one JSON value; `cmp` proves the manifest is copied, not retyped | ❌ W0 | ⬜ pending |
 | 1-02-02 | 02 | 1 | PROTO-02 | file + byte count | 9 guard/cancel/malformed scenarios present; `cancel-unknown/plugin.jsonl` zero bytes; `malformed-oversize/host.jsonl` exactly 300 bytes; `SCENARIO.json` parses with `maxFrameBytes: 256`; totals reach 17 | ❌ W0 | ⬜ pending |
-| 1-02-03 | 02 | 1 | PROTO-01, PROTO-03 | doc gate | all 14 `## ` headings present; all 10 error codes present; `-32003`/`-32006` absent from `PROTOCOL.md`; `section/changed` and `lastAssistantMessage` absent from the four amended planning files; `git diff --quiet -- .planning/research/` | ❌ W0 | ⬜ pending |
+| 1-02-03 | 02 | 1 | PROTO-01, PROTO-03 | doc gate | plan 02 task 3's `<automated>`, clause for clause: all 14 `## ` headings present; all 10 error codes present; `grep -q 'section.changed' PROTOCOL.md`; `! grep -rq 'section/changed' PROTOCOL.md .planning/REQUIREMENTS.md .planning/ROADMAP.md .planning/PROJECT.md`; `! grep -q -- '-32003' PROTOCOL.md`; `! grep -q -- '-32006' PROTOCOL.md`; `! grep -q '−' PROTOCOL.md` (ASCII hyphen-minus only); `grep -q 'matchTools' .planning/REQUIREMENTS.md`; `! grep -rq 'lastAssistantMessage' .planning/REQUIREMENTS.md .planning/PROJECT.md`; `grep -q 'SCENARIO.json' PROTOCOL.md`; `git diff --quiet -- .planning/research/` | ❌ W0 | ⬜ pending |
 | 1-03-01 | 03 | 1 | E2E-03 | grep | `grep -q '^status: accepted' && grep -q '^### Confirmation' && grep -q 'docs/testing.md' && grep -q 'python-runtime'` on ADR 0001 | ❌ W0 | ⬜ pending |
 | 1-03-02 | 03 | 1 | TOOL-02 | YAML parse + grep | workflow parses; `conformance` and `red state is visible` have no `continue-on-error`; `hlint`/`fourmolu` do; no `hlint-setup`/`hlint-run` | ❌ W0 | ⬜ pending |
 | 1-03-03 | 03 | 1 | TOOL-02 | grep | `grep -q '^indentation: 4' fourmolu.yaml` and the README command/red-state sections | ❌ W0 | ⬜ pending |
@@ -140,4 +140,4 @@ Things that look like validation in Phase 1 but are not:
 - [x] Feedback latency < 1s for the suite
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** approved 2026-08-25 · revised 2026-08-25 (checker iteration 2: `--test-arguments` quoting, 17 scenarios, 5 meta-tests, 21 expected failures)
+**Approval:** approved 2026-08-25 · revised 2026-08-25 (checker iteration 2: `--test-arguments` quoting, 17 scenarios, 5 meta-tests, 21 expected failures) · revised 2026-08-25 (checker iteration 3: row 1-02-03 restated clause for clause against plan 02 task 3's verify, including the ASCII-hyphen gate)
