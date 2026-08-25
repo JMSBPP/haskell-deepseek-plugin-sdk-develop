@@ -37,7 +37,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. `stack build` and `stack test` succeed from a clean clone on `lts-24.56` (GHC 9.10.3) with library, executable, and test-suite stanzas under `GHC2024`, `-Wall`, and `-threaded -rtsopts "-with-rtsopts=-N"`.
   4. A push or PR on either remote runs a GitHub Actions job that builds, runs the test suite, and reports `hlint`/`fourmolu` results.
   5. A written maintainer decision exists stating which e2e tier deepseek-harness CI will accept (a GHC job versus the Node fixture plugin), and it is referenceable from the eventual bridge PR.
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Repin `lts-24.56` and replace the scaffold with an hpack library + executable + test-suite
+- [ ] 01-02-PLAN.md — Write the 13-scenario conformance corpus and freeze `PROTOCOL.md`
+- [ ] 01-03-PLAN.md — ADR 0001 (e2e tiering), the CI workflow, and the linter configuration
+- [ ] 01-04-PLAN.md — The tasty conformance skeleton with visible red state and the four property families
+- [ ] 01-05-PLAN.md — Enable Actions and record a green CI run on both remotes
 
 Note: PROTO-03's runtime halves are implemented later (plugin side in Phase 5, host side in Phase 8); here it is frozen in the spec and pinned by the mismatch corpus scenario. Unresolved on entry: the cancellation error code is written `-32800` in REQUIREMENTS.md and `-32003` in ARCHITECTURE.md — `PROTOCOL.md` must pick one and the corpus must carry it.
 
@@ -152,7 +159,7 @@ Dependency order permits concurrency: 4 alongside 2-3, and 8-9 alongside 2-7.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Protocol Freeze and Toolchain Foundation | 0/TBD | Not started | - |
+| 1. Protocol Freeze and Toolchain Foundation | 0/5 | Planned | - |
 | 2. Wire Envelope and Transport | 0/TBD | Not started | - |
 | 3. Peer, Async Router, and Cancellation | 0/TBD | Not started | - |
 | 4. Schema Derivation and Validation | 0/TBD | Not started | - |
