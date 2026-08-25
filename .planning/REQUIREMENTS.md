@@ -14,7 +14,7 @@
 
 ### Toolchain (TOOL)
 
-- [ ] **TOOL-01**: `stack.yaml` pinned to `lts-24.56` (GHC 9.10.3); package restructured to library + executable + test-suite with `GHC2024`, `-Wall`, `-threaded -rtsopts "-with-rtsopts=-N"` on executables
+- [x] **TOOL-01**: `stack.yaml` pinned to `lts-24.56` (GHC 9.10.3); package restructured to library + executable + test-suite with `GHC2024`, `-Wall`, `-threaded -rtsopts "-with-rtsopts=-N"` on executables
 - [ ] **TOOL-02**: CI (GitHub Actions) builds, runs the test suite, and runs `hlint`/`fourmolu` checks on every push to `main` and PRs on both remotes
 - [ ] **TOOL-03**: Developer can run `stack test` and `stack run echo -- --dump-manifest` from a clean clone with no extra setup beyond ghcup/stack
 
@@ -106,7 +106,7 @@ Which phases cover which requirements. Every v1 requirement maps to exactly one 
 | PROTO-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 | PROTO-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 | PROTO-04 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
-| TOOL-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| TOOL-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 | TOOL-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 | TOOL-03 | Phase 7 — Echo Example and Conformance Gate | Pending |
 | WIRE-01 | Phase 2 — Wire Envelope and Transport | Pending |

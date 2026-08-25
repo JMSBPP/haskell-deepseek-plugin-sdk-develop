@@ -159,7 +159,7 @@ Dependency order permits concurrency: 4 alongside 2-3, and 8-9 alongside 2-7.
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Protocol Freeze and Toolchain Foundation | 0/5 | Planned | - |
+| 1. Protocol Freeze and Toolchain Foundation | 1/5 | In Progress | - |
 | 2. Wire Envelope and Transport | 0/TBD | Not started | - |
 | 3. Peer, Async Router, and Cancellation | 0/TBD | Not started | - |
 | 4. Schema Derivation and Validation | 0/TBD | Not started | - |
