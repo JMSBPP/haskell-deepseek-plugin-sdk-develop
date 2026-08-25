@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-04-PLAN.md
-last_updated: "2026-08-25T20:52:30.000Z"
-last_activity: "2026-08-25 — Plan 01-04 complete: conformance suite green with 21 visible expected failures"
+stopped_at: Completed 01-05-PLAN.md
+last_updated: "2026-08-25T21:08:38.000Z"
+last_activity: "2026-08-25 — Plan 01-05 complete: ci green on both remotes for 242ebfa, TOOL-02 proven end to end"
 progress:
   total_phases: 10
   completed_phases: 0
   total_plans: 5
-  completed_plans: 4
-  percent: 80
+  completed_plans: 5
+  percent: 100
 ---
 
 # Project State
@@ -26,16 +26,16 @@ See: .planning/PROJECT.md (updated 2026-08-25)
 ## Current Position
 
 Phase: 1 of 10 (Protocol Freeze and Toolchain Foundation)
-Plan: 4 of 5 in current phase
-Status: In progress
-Last activity: 2026-08-25 — Plan 01-04 complete: conformance suite green with 21 visible expected failures
+Plan: 5 of 5 in current phase
+Status: All plans complete — awaiting phase verification
+Last activity: 2026-08-25 — Plan 01-05 complete: ci green on both remotes for 242ebfa, TOOL-02 proven end to end
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: —
 - Total execution time: 0.0 hours
 
@@ -54,6 +54,7 @@ Progress: [████████░░] 80%
 | Phase 01 P03 | 3min | 3 tasks | 6 files |
 | Phase 01-protocol-freeze-and-toolchain-foundation P02 | 5min | 3 tasks | 56 files |
 | Phase 01-protocol-freeze-and-toolchain-foundation P04 | 4min | 3 tasks | 5 files |
+| Phase 01-protocol-freeze-and-toolchain-foundation P05 | 15min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,9 @@ Recent decisions affecting current work:
 - [Phase 01]: The Hedgehog cancellation state machine targets hedgehog 1.5's barbies FunctorB/TraversableB Command, not the deprecated HTraversable, so Phase 3 replaces the model and not the plumbing
 - [Phase 01]: scripts/check-red-visible.sh parses a captured tasty log instead of running stack test, so CI builds and runs the suite once and set -euo pipefail cannot swallow its exit code
 - [Phase 01]: The corpus is never wired as a tasty-golden golden; --accept would rewrite the hand-authored spec. Goldens start at Phase 5's --dump-manifest output
+- [Phase 01]: TOOL-02's signal is two runs, not one workflow file — ci concluded success on 242ebfa on both origin (fork) and upstream (parent); a green parent says nothing about the fork
+- [Phase 01]: Actions permissions are readable with an ordinary token, so "are Actions on?" is automated even though turning them on is not; both repos reported {enabled:true, allowed_actions:all} and task 2 was a no-op confirmation
+- [Phase 01]: hlint and fourmolu are already clean on the runner (No hints; --mode check --check-idempotence exits 0), so Phase 7's flip to blocking is a two-line continue-on-error deletion with no reformat debt
 
 ### Pending Todos
 
@@ -99,9 +103,10 @@ None yet.
 - [Phase 4]: The mechanism for mechanically agreeing Haskell-derived schemas with the harness's `assertSupportedJsonSchema` has a known field-set-only gap in the closest prior art; flagged for research during planning.
 - [Phase 6/9]: `SubagentProvider.start`'s full return surface and the `presentation` field vocabulary were not fully audited; both need a source read before implementation.
 - [Phase 2/10]: Windows behavior (newline mode, process termination, GHC console handling) is untested; the harness runs a Windows CI lane.
+- [Phase 1/CI]: Every action in ci.yml is pinned by tag, not by SHA. Both repos currently report sha_pinning_required: false; if an org policy enables SHA pinning on d2p-finance, the workflow stops running with no code change on this side.
 
 ## Session Continuity
 
-Last session: 2026-08-25T20:52:30.000Z
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-08-25T21:08:38.000Z
+Stopped at: Completed 01-05-PLAN.md
 Resume file: None
