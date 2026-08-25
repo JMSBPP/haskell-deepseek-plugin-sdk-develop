@@ -1,11 +1,18 @@
 {- |
-Placeholder entry point for the @conformance@ suite so the test-suite stanza
-compiles before the corpus tree exists. Plan 04 replaces this with the real
-tasty entry point that builds one test per @corpus/\<scenario\>@ directory.
+Entry point of the @conformance@ suite. The corpus scenario tree is built in
+'IO' before 'defaultMain' so that one test exists per @corpus/<scenario>@
+directory found on disk.
 -}
 module Main (main) where
 
 import Test.Tasty (defaultMain, testGroup)
 
+import Conformance.Corpus qualified as Corpus
+
 main :: IO ()
-main = defaultMain (testGroup "conformance" [])
+main = do
+    scenarios <- Corpus.listScenarios
+    defaultMain $
+        testGroup
+            "conformance"
+            [Corpus.tests scenarios]

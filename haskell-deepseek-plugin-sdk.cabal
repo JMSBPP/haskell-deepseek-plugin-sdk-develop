@@ -72,6 +72,7 @@ test-suite conformance
   type: exitcode-stdio-1.0
   main-is: Main.hs
   other-modules:
+      Conformance.Corpus
       Paths_haskell_deepseek_plugin_sdk
   autogen-modules:
       Paths_haskell_deepseek_plugin_sdk
