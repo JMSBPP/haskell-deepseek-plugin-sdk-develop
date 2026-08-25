@@ -27,12 +27,19 @@ output.
 |----------|-------|
 | **Framework** | `tasty 1.5.4` + `tasty-hunit 0.10.2` + `tasty-golden 2.3.6` + `tasty-hedgehog 1.4.0.2` + `tasty-expected-failure 0.12.3` + `hedgehog 1.5` |
 | **Config file** | `package.yaml` → `tests: conformance:` (❌ Wave 0 — created by plan 01) |
-| **Quick run command** | `stack test --test-arguments="-p '/meta/'"` |
+| **Quick run command** | `stack test --test-arguments='-p /meta/'` |
 | **Full suite command** | `stack test 2>&1 \| tee conformance.log && scripts/check-red-visible.sh conformance.log` |
 | **Compile gate** | `stack build --pedantic --test --no-run-tests` |
 | **Estimated runtime** | < 1 second for the suite; the compile gate dominates |
 
-`--test-arguments="--no-create"` is **not** usable in Phase 1: `--no-create` is
+**Quote `--test-arguments` from the outside only.** Stack passes the value
+through to the test binary without a shell, so `--test-arguments="-p '/meta/'"`
+delivers the single quotes to tasty as literal pattern characters: the pattern
+matches no test name and the run throws instead of filtering. The forms below —
+`--test-arguments='-p /meta/'` and `--test-arguments='-p /properties/'` — are the
+verified working ones.
+
+`--test-arguments='--no-create'` is **not** usable in Phase 1: `--no-create` is
 contributed by the `tasty-golden` ingredient, which is only registered once a
 golden test exists in the tree. Verified: the suite rejects it with
 `Invalid option '--no-create'`. Phase 5 adds the first golden and the flag with it.
@@ -54,16 +61,16 @@ golden test exists in the tree. Verified: the suite rejects it with
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
 | 1-01-01 | 01 | 1 | TOOL-01 | grep | `grep -qx 'snapshot: lts-24.56' stack.yaml && grep -qx 'language: GHC2024' package.yaml` | ❌ W0 | ⬜ pending |
 | 1-01-02 | 01 | 1 | TOOL-01 | build | `stack build --pedantic --test --no-run-tests && git diff --exit-code -- '*.cabal'` | ❌ W0 | ⬜ pending |
-| 1-02-01 | 02 | 1 | PROTO-02, PROTO-03, PROTO-04 | file + JSON parse | 13 directories present, both frame files each, every non-exempt line one JSON value | ❌ W0 | ⬜ pending |
-| 1-02-02 | 02 | 1 | PROTO-02 | grep | every `corpus/*/EXPECTED.md` line 1 matches `^# Flipped by: Phase [2-7] — .+` | ❌ W0 | ⬜ pending |
-| 1-02-03 | 02 | 1 | PROTO-01, PROTO-03 | doc gate | all 14 `## ` headings present; all 11 error codes present; `-32003` and `section/changed` absent repo-wide | ❌ W0 | ⬜ pending |
+| 1-02-01 | 02 | 1 | PROTO-02, PROTO-03, PROTO-04 | file + JSON parse | 8 request/response scenarios present with `host.jsonl`/`plugin.jsonl`/`EXPECTED.md`; every line one JSON value; `cmp` proves the manifest is copied, not retyped | ❌ W0 | ⬜ pending |
+| 1-02-02 | 02 | 1 | PROTO-02 | file + byte count | 9 guard/cancel/malformed scenarios present; `cancel-unknown/plugin.jsonl` zero bytes; `malformed-oversize/host.jsonl` exactly 300 bytes; `SCENARIO.json` parses with `maxFrameBytes: 256`; totals reach 17 | ❌ W0 | ⬜ pending |
+| 1-02-03 | 02 | 1 | PROTO-01, PROTO-03 | doc gate | all 14 `## ` headings present; all 10 error codes present; `-32003`/`-32006` absent from `PROTOCOL.md`; `section/changed` and `lastAssistantMessage` absent from the four amended planning files; `git diff --quiet -- .planning/research/` | ❌ W0 | ⬜ pending |
 | 1-03-01 | 03 | 1 | E2E-03 | grep | `grep -q '^status: accepted' && grep -q '^### Confirmation' && grep -q 'docs/testing.md' && grep -q 'python-runtime'` on ADR 0001 | ❌ W0 | ⬜ pending |
 | 1-03-02 | 03 | 1 | TOOL-02 | YAML parse + grep | workflow parses; `conformance` and `red state is visible` have no `continue-on-error`; `hlint`/`fourmolu` do; no `hlint-setup`/`hlint-run` | ❌ W0 | ⬜ pending |
 | 1-03-03 | 03 | 1 | TOOL-02 | grep | `grep -q '^indentation: 4' fourmolu.yaml` and the README command/red-state sections | ❌ W0 | ⬜ pending |
-| 1-04-01 | 04 | 2 | PROTO-02, PROTO-04 | unit (meta) | `stack test --test-arguments="-p '/meta/'"` — four `OK` lines | ❌ W0 | ⬜ pending |
-| 1-04-02 | 04 | 2 | PROTO-02 | unit (property) | `stack test --test-arguments="-p '/properties/'"` — four `FAIL (expected: …)` | ❌ W0 | ⬜ pending |
-| 1-04-03 | 04 | 2 | TOOL-01 | script | `scripts/check-red-visible.sh conformance.log` exits 0 reporting 17 expected failures; exits 1 on a seeded `OK (unexpected:` log | ❌ W0 | ⬜ pending |
-| 1-05-01 | 05 | 3 | TOOL-02 | git | `git rev-parse HEAD origin/main upstream/main` — three identical SHAs | ❌ W0 | ⬜ pending |
+| 1-04-01 | 04 | 2 | PROTO-02, PROTO-04 | unit (meta) | `stack test --test-arguments='-p /meta/'` — `All 5 tests passed`, five `OK` lines | ❌ W0 | ⬜ pending |
+| 1-04-02 | 04 | 2 | PROTO-02 | unit (property) | `stack test --test-arguments='-p /properties/'` — four `FAIL (expected: …)` | ❌ W0 | ⬜ pending |
+| 1-04-03 | 04 | 2 | TOOL-01 | script | `scripts/check-red-visible.sh conformance.log` exits 0 reporting 21 expected failures; exits 1 on a seeded `OK (unexpected:` log | ❌ W0 | ⬜ pending |
+| 1-05-01 | 05 | 3 | TOOL-02 | git + CLI | `git rev-parse HEAD origin/main upstream/main` — three identical SHAs; `gh api repos/<each>/actions/permissions` recorded | ❌ W0 | ⬜ pending |
 | 1-05-03 | 05 | 3 | TOOL-02 | CLI | `gh run list --repo <each> --workflow ci --limit 1 --json conclusion,headSha` — `success` on the pushed SHA | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
@@ -81,9 +88,9 @@ stack test exits 0
   AND its output contains no 'OK (unexpected:'
 ```
 
-Expected steady state at the end of Phase 1: `All 21 tests passed` — 13 corpus
-scenarios failing as expected, 4 property families failing as expected, 4
-meta-tests passing.
+Expected steady state at the end of Phase 1: `All 26 tests passed` — 17 corpus
+scenarios failing as expected, 4 property families failing as expected, 5
+meta-tests passing (21 expected failures in total).
 
 ---
 
@@ -96,7 +103,7 @@ the test-suite stanza and plan 04 creates the tests themselves.
 - [ ] `package.yaml` `tests: conformance:` stanza — plan 01
 - [ ] `stack.yaml` repinned to `lts-24.56` + committed `stack.yaml.lock` — plan 01
 - [ ] `haskell-deepseek-plugin-sdk.cabal` regenerated and committed — plan 01
-- [ ] `corpus/<13 scenarios>/{host.jsonl,plugin.jsonl,EXPECTED.md}` — plan 02
+- [ ] `corpus/<17 scenarios>/{host.jsonl,plugin.jsonl,EXPECTED.md}` plus `corpus/malformed-oversize/SCENARIO.json` — plan 02
 - [ ] `test/Main.hs`, `test/Conformance/Corpus.hs`, `test/Conformance/Properties.hs` — plan 04
 - [ ] `scripts/check-red-visible.sh` — plan 04
 - [ ] Framework install: **none**. The whole tasty + hedgehog set resolves from `lts-24.56` with no `extra-deps` (verified by a local build).
@@ -107,7 +114,7 @@ the test-suite stanza and plan 04 creates the tests themselves.
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| GitHub Actions enabled on both repositories | TOOL-02 | A fork has Actions disabled until an owner enables them in Settings; no CLI path exists that does not need an owner-scope token and an interactive policy choice | Open each repository's `/settings/actions`, select "Allow all actions and reusable workflows", save, then re-trigger the run. Plan 05 task 2. |
+| GitHub Actions enabled on both repositories | TOOL-02 | Reading the setting is automated (`gh api repos/<r>/actions/permissions`); **changing** it needs an owner-scope token and an interactive policy choice, and a disabled repository produces silence rather than a failing run — the one CI outcome a script cannot tell apart from success | Read the payload first. Both repositories reported `{"enabled":true,"allowed_actions":"all"}` when the plan was written, so the expected path is a recorded no-op. Only if one reports otherwise: open its `/settings/actions`, select "Allow all actions and reusable workflows", save, re-trigger. Plan 05 task 2. |
 | CI green on both remotes | TOOL-02 | Requires a push and a runner; no local command produces this signal | `gh run list --repo <each> --workflow ci --limit 1 --json conclusion,headSha,url`. Plan 05 task 3 automates the assertion once the push has happened. |
 
 ---
@@ -117,6 +124,7 @@ the test-suite stanza and plan 04 creates the tests themselves.
 Things that look like validation in Phase 1 but are not:
 
 - **`stack run dsh-plugin-echo`** exits non-zero by design until Phase 7. That is not a failure.
+- **A `--test-arguments` filter that reports `All 0 tests passed` or throws** is a quoting bug, not a missing test. See the quoting note above.
 - **A red X on the `hlint` or `fourmolu` CI step** with a green job is expected: both carry `continue-on-error: true` until Phase 7 flips them alongside the last `EXPECTED.md` deletion. The Phase 1 baseline is that both are already clean, so that flip is a one-line change rather than a tree-wide reformat.
 - **`ignoreTest` / `ignoreTestBecause`** would make every scenario report `IGNORED`: never running, never flipping, never failing. Explicitly rejected; `expectFailBecause` is used precisely because an unexpected pass fails the suite.
 - **Wiring the corpus as `tasty-golden` goldens** would let `--accept` rewrite the hand-authored spec with aeson's key order. Goldens belong on generated artifacts, starting with Phase 5's `--dump-manifest` output.
@@ -132,4 +140,4 @@ Things that look like validation in Phase 1 but are not:
 - [x] Feedback latency < 1s for the suite
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** approved 2026-08-25
+**Approval:** approved 2026-08-25 · revised 2026-08-25 (checker iteration 2: `--test-arguments` quoting, 17 scenarios, 5 meta-tests, 21 expected failures)
