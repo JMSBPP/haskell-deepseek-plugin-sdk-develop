@@ -1,0 +1,80 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Linux only in Phase 1. This phase ships no transport, so a Windows/macOS matrix
+# would cost runner time for no signal. The matrix lands in Phase 2 together with
+# the NDJSON transport, where newline mode, process termination, and GHC console
+# handling first differ by platform.
+jobs:
+  build-and-test:
+    name: stack build + conformance (ubuntu, ghc 9.10.3)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - id: setup
+        uses: haskell-actions/setup@v2.12.0
+        with:
+          ghc-version: '9.10.3'
+          enable-stack: true
+          stack-version: 'latest'
+          cabal-update: false
+
+      - uses: actions/cache@v5
+        with:
+          path: |
+            ${{ steps.setup.outputs.stack-root }}
+            .stack-work
+          key: ${{ runner.os }}-stack-${{ hashFiles('stack.yaml.lock', 'package.yaml') }}
+          restore-keys: ${{ runner.os }}-stack-
+
+      - name: build dependencies
+        run: stack build --system-ghc --no-install-ghc --test --only-dependencies
+
+      - name: build
+        run: stack build --system-ghc --no-install-ghc --pedantic --test --no-run-tests
+
+      - name: generated .cabal is current
+        run: git diff --exit-code -- '*.cabal'
+
+      - name: conformance
+        shell: bash
+        run: |
+          set -o pipefail
+          stack test --system-ghc --no-install-ghc --pedantic 2>&1 | tee conformance.log
+
+      - name: red state is visible
+        run: scripts/check-red-visible.sh conformance.log
+
+      # Advisory until Phase 7 removes continue-on-error from both steps, in the
+      # same change that deletes the last corpus EXPECTED.md. Neither tool reads
+      # default-language from the .cabal, so both are told about GHC2024.
+      - name: hlint
+        continue-on-error: true
+        run: |
+          curl -fsSL https://github.com/ndmitchell/hlint/releases/download/v3.10/hlint-3.10-x86_64-linux.tar.gz \
+            | tar xz --strip-components=1 -C "$RUNNER_TEMP" hlint-3.10/hlint
+          "$RUNNER_TEMP/hlint" src app test
+
+      - name: fourmolu
+        continue-on-error: true
+        uses: haskell-actions/run-fourmolu@v13
+        with:
+          version: '0.20.1.0'
+          extra-args: '--ghc-opt -XGHC2024'
+          pattern: |
+            src/**/*.hs
+            app/**/*.hs
+            test/**/*.hs

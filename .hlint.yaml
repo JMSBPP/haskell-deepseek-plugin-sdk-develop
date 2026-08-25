@@ -1,0 +1,3 @@
+# hlint does not read default-language from the .cabal file, so GHC2024 has to be
+# passed explicitly or the parser rejects syntax that compiles cleanly.
+- arguments: [-XGHC2024]
