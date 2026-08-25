@@ -1,0 +1,1 @@
+# haskell-deepseek-plugin-sdk
