@@ -16,25 +16,29 @@ A model running in a headless `dsh` profile can call a tool implemented in Haske
 
 ### Active
 
-- [ ] JSON-RPC 2.0 request/response/notification envelope with newline-delimited stdio framing, built on a maintained Hackage package (evaluate `jsonrpc`/`json-rpc` first; fall back to an owned aeson module only if none is maintained)
-- [ ] Bidirectional dispatch: plugin handles harness→plugin requests (`tool/execute`, `guard/decide`, `section/render`, `subagent/run`, `shutdown`, `$/cancel`) and issues plugin→harness requests (`initialize` handshake, later `agent/inject`)
+- [ ] Owned JSON-RPC 2.0 envelope (~250 LOC on aeson + stm): request/response/notification, newline-delimited stdio framing, `params` always a JSON object, no batch support, bounded reader (`maxFrameBytes` config). Hackage `json-rpc` (unframed output, heavy closure) and `jsonrpc` (MPL-2.0, one vendor) were evaluated and rejected
+- [ ] Bidirectional dispatch: host-initiated `initialize` handshake returns the manifest; plugin handles `tool/execute`, `guard/decide`, `subagent/run`, `shutdown`, `$/cancel`; plugin may push `section/changed` and later `agent/inject`
 - [ ] `Plugin` record with `tools`, `guards`, `sections`, `subagents`; `runPlugin :: Plugin -> IO ()` owns the event loop, stdout buffering, EOF/SIGPIPE shutdown
-- [ ] `Tool` with args/output types whose JSON Schema is derived from the Haskell types (`HasSchema` class, Generic default), `execute :: a -> Exec -> IO v`, pure total `render :: a -> v -> [ContentBlock]`
-- [ ] `Guard` for `tools/pre-execute` returning `Allow | Deny Text | Rewrite Value` (Allow = waterfall `next()`)
-- [ ] `Section` prompt-section provider
+- [ ] `Tool` with args/output types whose JSON Schema is derived via `autodocodec` into an owned `DshSchema` ADT restricted to the harness's supported subset (no `$ref`/`$defs`/`anyOf`/bounds; `$comment`→`description`); output schema mandatory; `execute :: a -> Exec -> IO v`; pure total `render :: a -> v -> [ContentBlock]` runs plugin-side at execute time and ships its blocks inside the `tool/execute` result so the harness can replay without the process
+- [ ] `Guard` bound to the `tools/pre-execute` waterfall returning `Allow | Deny Text | Ask (Maybe Text)` (Allow = `next()`); rewrite is not honored by the harness's `PreToolDecision` and is excluded
+- [ ] `Section`: static prompt-section text declared in the manifest, refreshed by a `section/changed` push notification (`PromptSection.text` is synchronous in the harness, so no per-step round-trip)
 - [ ] `Subagent` provider: one delegation request in, `{stopReason, lastAssistantMessage}` out
 - [ ] `ContentBlock` mirroring `packages/llm/llm/src/types.ts` (`text | reasoning | image | tool-call | tool-result`) with an `Unknown Value` case for merge-extensibility
 - [ ] Cancellation: `$/cancel {id}` notification flips `Exec.cancelled :: STM Bool`
 - [ ] Every inbound frame validated and rebuilt before use (hostile-input stance matching the harness's own fd-3 protocol)
+- [ ] Frozen `PROTOCOL.md` plus a shared conformance frame corpus (`host.jsonl`/`plugin.jsonl`) that both the Haskell tests and the TS bridge tests replay
+- [ ] `runPlugin` hardening: `hDuplicateTo stderr stdout` so stray writes cannot corrupt framing, binary/UTF-8 handles, `-threaded` RTS, async-per-request router so `$/cancel` is readable while handlers run
 - [ ] `--dump-manifest` flag prints the handshake JSON so the bridge can snapshot it without GHC in CI
 - [ ] `protocolVersion` in the handshake; mismatches fail loud, no compatibility shims (pre-1.0 stance matching deepseek-harness)
 - [ ] Golden tests for wire frames (`hspec-golden`) and property tests for codecs (`QuickCheck`)
 - [ ] `examples/echo`: one tool + one guard executable
 - [ ] TypeScript bridge plugin `@deepseek-ai/dsh-remote-plugin` in deepseek-harness (separate PR there): spawns the plugin binary, performs handshake, registers tools/guards/sections/subagents as Cordis effects, forwards cancellation, HMR restart on config change
-- [ ] End-to-end: headless `dsh` profile row pointing at the echo binary; keyless snapshot recording a model calling the Haskell tool and the guard vetoing a call
+- [ ] End-to-end, split by CI capability: (a) in deepseek-harness, a keyless snapshot through a runnable example whose bridge row points at a ~50-line Node fixture plugin replaying the shared frame corpus (harness CI has no GHC); (b) in this repo, a real-binary e2e that runs the echo plugin against `dsh --profile headless` when `DEEPSEEK_API_KEY` is present and against the fake host otherwise
 
 ### Out of Scope
 
+- Guard argument rewriting — harness `PreToolDecision` is `allow|deny|ask`; rewriting is excluded upstream because arguments are already logged
+- Dynamic per-step prompt sections — synchronous harness API and KV-cache prefix stability
 - Generic Cordis reflection (arbitrary `service/call`, `event/subscribe` with dispatch modes) — v2; v1 binds named dsh seams only
 - Typert-generated Haskell bindings — depends on generic reflection
 - HTTP / WebSocket transports — stdio only in v1; transport is behind one interface so these can be added
@@ -53,9 +57,9 @@ A model running in a headless `dsh` profile can call a tool implemented in Haske
 
 ## Constraints
 
-- **Tech stack**: Haskell via Stack, resolver pinned (`lts-22.43`) — reproducible builds; GHC 9.6 line
+- **Tech stack**: Haskell via Stack, resolver pinned to `lts-24.56` (GHC 9.10.3) — `lts-22.43` emitted `integer` args as `number` and lacks aeson 2.2; library + executable + test-suite, `GHC2024`, `-threaded`
 - **Transport**: newline-delimited JSON-RPC 2.0 over stdio, stdout reserved for frames, logs to stderr — matches harness SDK server and MCP stdio framing
-- **Dependencies**: maintained Hackage packages preferred over hand-rolling (mirrors the harness policy); unmaintained JSON-RPC libs are rejected, not patched
+- **Dependencies**: maintained Hackage packages preferred, but a dependency must fit the wire exactly; the JSON-RPC envelope and `DshSchema` are owned because no package matched
 - **Compatibility**: none promised pre-1.0; protocol version mismatches fail loud
 - **Cross-repo**: the bridge lands in deepseek-harness under its gates; this repo cannot merge the e2e requirement alone
 - **Security**: inbound frames are hostile input; model-controlled tool args are validated against the derived schema before decode
@@ -66,9 +70,12 @@ A model running in a headless `dsh` profile can call a tool implemented in Haske
 |----------|-----------|---------|
 | Bind dsh seams (Tool/Guard/Section/Subagent) in v1, not generic Cordis reflection | Fastest path to a model-callable Haskell tool; keeps the wire typed | — Pending |
 | stdio transport only in v1, behind a transport interface | Matches existing harness stdio protocols; HTTP/WS additive later | — Pending |
-| Use a Hackage JSON-RPC package if maintained, else own aeson module | Dependencies-over-hand-rolling, but not at the cost of an abandoned dep | — Pending |
+| Own the JSON-RPC envelope; use `autodocodec` for codecs but an owned `DshSchema` ADT | Research: `json-rpc` emits unframed output, `jsonrpc` is MPL-2.0/one-vendor; `autodocodec-schema` emits constructs the harness rejects | ✓ Decided (research) |
+| Guard = `Allow | Deny | Ask`; sections static; `render` plugin-side | Harness types are synchronous / closed; verified in `packages/core/tools` and `system-prompt` source | ✓ Decided (research) |
+| Snapshot via Node fixture plugin in harness CI; real-binary e2e in this repo | Harness CI has no GHC; snapshot rule forbids mock compositions | — Pending maintainer alignment |
+| Repin to `lts-24.56` | Series terminal, aeson 2.2, correct integer schemas | — Pending (Phase 0) |
 | TS bridge is a phase of this roadmap, delivered as a PR to deepseek-harness | e2e core value is unreachable without it | — Pending |
 | Upstream `d2p-finance`, develop on `JMSBPP` fork | Requested ownership split | ✓ Done |
 
 ---
-*Last updated: 2026-08-25 after initialization*
+*Last updated: 2026-08-25 after research corrections*
