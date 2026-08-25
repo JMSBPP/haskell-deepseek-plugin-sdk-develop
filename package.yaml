@@ -1,0 +1,78 @@
+name: haskell-deepseek-plugin-sdk
+version: 0.1.0.0
+license: BSD-3-Clause
+license-file: LICENSE
+synopsis: Haskell SDK for DeepSeek Harness out-of-process plugins
+description: Please see the README and PROTOCOL.md.
+category: Development
+author: JMSBPP
+maintainer: juan.serranotmf@gmail.com
+copyright: 2026 JMSBPP
+github: d2p-finance/haskell-deepseek-plugin-sdk
+extra-source-files:
+  - README.md
+  - CHANGELOG.md
+  - PROTOCOL.md
+
+language: GHC2024
+
+ghc-options:
+  - -Wall
+  - -Wcompat
+  - -Widentities
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wmissing-export-lists
+  - -Wmissing-home-modules
+  - -Wpartial-fields
+  - -Wredundant-constraints
+
+library:
+  source-dirs: src
+  dependencies:
+    - base >= 4.18 && < 4.22
+    - aeson >= 2.2 && < 2.3
+    - async >= 2.2 && < 2.3
+    - bytestring >= 0.11 && < 0.13
+    - containers >= 0.6 && < 0.9
+    - safe-exceptions >= 0.1.7 && < 0.2
+    - stm >= 2.5 && < 2.6
+    - text >= 2.0 && < 2.2
+
+executables:
+  dsh-plugin-echo:
+    source-dirs: app/echo
+    main: Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - '-with-rtsopts=-N'
+    dependencies:
+      - base
+      - haskell-deepseek-plugin-sdk
+      - optparse-applicative >= 0.18 && < 0.20
+
+tests:
+  conformance:
+    source-dirs: test
+    main: Main.hs
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - '-with-rtsopts=-N'
+    dependencies:
+      - base
+      - haskell-deepseek-plugin-sdk
+      - aeson
+      - bytestring
+      - directory
+      - filepath
+      - tasty
+      - tasty-hunit
+      - tasty-golden
+      - tasty-hedgehog
+      - tasty-expected-failure
+      - hedgehog
+      - text
+      - typed-process
+      - temporary

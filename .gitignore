@@ -3,3 +3,4 @@ dist-newstyle/
 *.hi
 *.o
 .planning/research/.tmp
+conformance.log
