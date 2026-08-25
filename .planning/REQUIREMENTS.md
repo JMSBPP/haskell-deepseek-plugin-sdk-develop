@@ -15,7 +15,7 @@
 ### Toolchain (TOOL)
 
 - [x] **TOOL-01**: `stack.yaml` pinned to `lts-24.56` (GHC 9.10.3); package restructured to library + executable + test-suite with `GHC2024`, `-Wall`, `-threaded -rtsopts "-with-rtsopts=-N"` on executables
-- [ ] **TOOL-02**: CI (GitHub Actions) builds, runs the test suite, and runs `hlint`/`fourmolu` checks on every push to `main` and PRs on both remotes
+- [x] **TOOL-02**: CI (GitHub Actions) builds, runs the test suite, and runs `hlint`/`fourmolu` checks on every push to `main` and PRs on both remotes
 - [ ] **TOOL-03**: Developer can run `stack test` and `stack run echo -- --dump-manifest` from a clean clone with no extra setup beyond ghcup/stack
 
 ### Wire (WIRE)
@@ -66,7 +66,7 @@
 
 - [ ] **E2E-01**: In this repo, `stack test` includes an e2e that drives the built echo binary through the fake host replaying the full corpus
 - [ ] **E2E-02**: In this repo, a keyed e2e (skipped without `DEEPSEEK_API_KEY`) runs `dsh --profile headless` with a patch row pointing at `dsh-plugin-echo` and asserts the session log shows a `tool/call` to `echo` and a denied call
-- [ ] **E2E-03**: Maintainer alignment recorded: whether harness CI gets a GHC job or the Node fixture is the sanctioned path (decision captured in the bridge PR's Agent Note)
+- [x] **E2E-03**: Maintainer alignment recorded: whether harness CI gets a GHC job or the Node fixture is the sanctioned path (decision captured in the bridge PR's Agent Note)
 
 ## v2 Requirements
 
@@ -107,7 +107,7 @@ Which phases cover which requirements. Every v1 requirement maps to exactly one 
 | PROTO-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 | PROTO-04 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
 | TOOL-01 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
-| TOOL-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| TOOL-02 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 | TOOL-03 | Phase 7 — Echo Example and Conformance Gate | Pending |
 | WIRE-01 | Phase 2 — Wire Envelope and Transport | Pending |
 | WIRE-02 | Phase 2 — Wire Envelope and Transport | Pending |
@@ -143,7 +143,7 @@ Which phases cover which requirements. Every v1 requirement maps to exactly one 
 | BRIDGE-10 | Phase 10 — End-to-End Validation and Harness Gates | Pending |
 | E2E-01 | Phase 7 — Echo Example and Conformance Gate | Pending |
 | E2E-02 | Phase 10 — End-to-End Validation and Harness Gates | Pending |
-| E2E-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Pending |
+| E2E-03 | Phase 1 — Protocol Freeze and Toolchain Foundation | Complete |
 
 **Coverage:**
 - v1 requirements: 42 total (the earlier count of 44 was a miscount; 42 checklist items are defined above)

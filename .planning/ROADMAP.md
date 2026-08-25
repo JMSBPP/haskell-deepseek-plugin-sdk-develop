@@ -42,7 +42,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 Plans:
 - [ ] 01-01-PLAN.md — Repin `lts-24.56` and replace the scaffold with an hpack library + executable + test-suite
 - [ ] 01-02-PLAN.md — Write the 17-scenario conformance corpus and freeze `PROTOCOL.md`
-- [ ] 01-03-PLAN.md — ADR 0001 (e2e tiering), the CI workflow, and the linter configuration
+- [x] 01-03-PLAN.md — ADR 0001 (e2e tiering), the CI workflow, and the linter configuration
 - [ ] 01-04-PLAN.md — The tasty conformance skeleton with visible red state and the four property families
 - [ ] 01-05-PLAN.md — Confirm Actions is enabled and record a green CI run on both remotes
 
